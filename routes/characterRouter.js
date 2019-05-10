@@ -49,7 +49,8 @@ function routes(Character) {
             });
 
 
-        }).patch((req, res) => {
+        })
+        .patch((req, res) => {
             const { character } = req;
 
             //if the _id gets accidently passed delet it bofor proceding
@@ -69,8 +70,9 @@ function routes(Character) {
                 }
                 return res.json(character);
             });
-        }).delete((req, res) => {
-            req.character, remove((err) => {
+        })
+        .delete((req, res) => {
+            req.character.remove((err) => {
                 if (err) {
                     return res.send(err);
                 }
