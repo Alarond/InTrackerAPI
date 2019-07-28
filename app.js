@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const port = process.env.PORT || 3000;
 //get datamodels from models folder
 const Character = require('./models/characterModel');
@@ -33,6 +34,7 @@ const db = mongoose.connect('mongodb+srv://InTrackerUser:InTrackerPassword@intra
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors());
 
 //load all of the routes;
 app.use('/api', characterRouter);
