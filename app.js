@@ -29,14 +29,7 @@ const options = {
     family: 4 // Use IPv4, skip trying IPv6
 };
 
-const db = mongoose.connect('mongodb+srv://alarond:S0ngbird1!@intrackerdb-y9e2a.mongodb.net/InTrackerDB?retryWrites=true', options);
-//const db = mongoose.connect('mongodb+srv://InTrackerUser:InTrackerUserPassword1@intrackerdb-y9e2a.mongodb.net/InTrackerDB?retryWrites=true', options);
-
-//if (process.env.ENV === 'Test') {
-//    const db = mongoose.connect('mongodb+srv://alarond:S0ngbird1!@intrackerdb-y9e2a.mongodb.net/InTrackerDB_Test?retryWrites=true', options);
-//} else {
-//    const db = mongoose.connect('mongodb+srv://alarond:S0ngbird1!@intrackerdb-y9e2a.mongodb.net/InTrackerDB?retryWrites=true', options);
-//}
+const db = mongoose.connect('mongodb+srv://InTrackerUser:InTrackerPassword@intrackerdb-y9e2a.mongodb.net/InTrackerDB?retryWrites=true', options);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -47,7 +40,7 @@ app.use('/api', groupRouter);
 app.use('/api', groupCharacterAssocRouter);
 
 app.get('/', (req, res) => {
-    res.send('Welecome To the RomanAPI!');
+    res.send('Welecome To the InTrackerAPI!');
 })
 
 app.server = app.listen(port, () => {
