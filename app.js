@@ -5,12 +5,15 @@ const port = process.env.PORT || 3000;
 //get datamodels from models folder
 const Character = require('./models/characterModel');
 const Group = require('./models/groupModel');
-const GroupCharacterAssoc = require('./models/groupCharacterAssocModel');
+//const GroupCharacterAssoc = require('./models/groupCharacterAssocModel');
+const Partymember = require('./models/partymembersModel');
 
 //add the Router and pass models back to the router
 const characterRouter = require('./routes/characterRouter')(Character);
 const groupRouter = require('./routes/groupRouter')(Group);
-const groupCharacterAssocRouter = require('./routes/groupCharacterAssocRouter')(GroupCharacterAssoc);
+//const groupCharacterAssocRouter = require('./routes/groupCharacterAssocRouter')(GroupCharacterAssoc);
+const partymemberRouter = require('./routes/partymemberRouter')(Partymember);
+//const groupCharacterAssocRouter = require('./routes/groupCharacterAssocRouter')(Group);
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
@@ -30,16 +33,18 @@ const options = {
     family: 4 // Use IPv4, skip trying IPv6
 };
 
-const db = mongoose.connect('mongodb+srv://InTrackerUser:InTrackerPassword@intrackerdb-y9e2a.mongodb.net/InTrackerDB?retryWrites=true', options);
+const db = mongoose.connect('mongodb+srv://InTrackerUser:InTrackerPassword@intrackerdb-y9e2a.mongodb.net/InTrackerDB?retryWrites=true&w=majority', options);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+//at this time cors is wide open.
 app.use(cors());
 
 //load all of the routes;
+//app.use('/api', groupCharacterAssocRouter);
 app.use('/api', characterRouter);
 app.use('/api', groupRouter);
-app.use('/api', groupCharacterAssocRouter);
+app.use('/api', partymemberRouter);
 
 app.get('/', (req, res) => {
     res.send('Welecome To the InTrackerAPI!');

@@ -17,7 +17,6 @@ function routes(Group) {
             //if (req.query.group) {
             //    query.group = req.query.group;
             //}
-
             Group.find(query, (err, groups) => {
                 if (err) {
                     return res.send(err);
