@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\controllers",
+    "\\models",
+    "\\routes"
   ],
-  "SelectedNode": "\\app.js",
+  "SelectedNode": "\\routes\\partymemberRouter.js",
   "PreviewInSolutionExplorer": false
 }

@@ -11,6 +11,23 @@ function routes(Character) {
         .get(controller.get);
 
     // Middleware - call the Controller for Get by ID
+    characterRouter.use('/character/bycharacterids/:stringOfIDs', (req, res) => {
+
+        const listOfIDs = req.params.stringOfIDs.split(';');
+
+        const query = { _id: { $in: listOfIDs } };
+
+        Character.find(query, (err, characters) => {
+            if (err) {
+                return res.send(err);
+            }
+
+            return res.json(characters);
+        });
+
+    });
+
+    // Middleware - call the Controller for Get by ID
     characterRouter.use('/character/:characterID', (req, res, next) => {
 
         Character.findById(req.params.characterID, (err, character) => {
@@ -28,6 +45,7 @@ function routes(Character) {
         });
 
     });
+
     //Take a Character by its ID String
     characterRouter.route('/character/:characterID')
         .get((req, res) => {

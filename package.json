@@ -1,7 +1,7 @@
 {
-  "name": "romanapi",
+  "name": "intrackerapi",
   "version": "1.0.0",
-  "description": "Returns Numbers or Roman Numerals",
+  "description": "connects to the InTracker Database",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
