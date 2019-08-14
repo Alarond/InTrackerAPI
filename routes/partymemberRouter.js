@@ -1,43 +1,88 @@
 const express = require('express');
+/* esling-disable = no-param-reassign */
+const partymemberController = require('../controllers/partymemberController');
 
 function routes(Partymember) {
     const partymemberRouter = express.Router();
-    //Get a list of Roman Numerals
+    const controller = partymemberController(Partymember);
+    //Use group Controller
     partymemberRouter.route('/partymember')
-        .post((req, res) => {
-            const partymember = new group(req.body);
+        .post(controller.post)
+        .get(controller.get);
 
-            Partymember.save();
-            return res.status(201).json(Group);
-        })
-        .get((req, res) => {
+    // Middleware - call the Controller for Get by ID
+    partymemberRouter.use('/partymember/:partymemberID', (req, res, next) => {
 
-            const query = {};
+        Partymember.findById(req.params.partymemberID, (err, partymember) => {
 
-            Partymember.find(query, (err, partymembers) => {
-                if (err) {
-                    return res.send(err);
-                }
+            if (err) {
+                return res.send(err);
+            }
 
-                return res.json(partymembers);
-            });
+            if (partymember) {
+                req.partymember = partymember;
+                return next();
+            }
 
+            return res.sendStatus(404);
         });
+
+    });
 
     //Take a group by its ID String
     partymemberRouter.route('/partymember/:partymemberID')
         .get((req, res) => {
+            res.json(req.partymember);
+        })
+        .put((req, res) => {
 
-            Partymember.findById(req.params.partymemberID, (err, partymember) => {
+            const { group } = req;
+
+            partymember.GroupID = req.body.GroupID;
+            partymember.CharacterID = req.body.CharacterID;
+
+            partymember.save((err) => {
                 if (err) {
                     return res.send(err);
                 }
                 return res.json(partymember);
             });
+
+
+        })
+        .patch((req, res) => {
+            const { partymember } = req;
+
+            //if the _id gets accidently passed delet it bofor proceding
+            if (req.body._id) {
+                delete req.body._id;
+            }
+
+            Object.entries(req.body).forEach((Item) => {
+                const key = item[0];
+                const value = item[1];
+                group[key] = value;
+            });
+
+            group.save((err) => {
+                if (err) {
+                    return res.send(err);
+                }
+                return res.json(partymember);
+            });
+        })
+        .delete((req, res) => {
+            req.partymember.remove((err) => {
+                if (err) {
+                    return res.send(err);
+                }
+
+                return res.sendStatus(204);
+            });
         });
 
     //Take a groupCharacterAssoc by its ID String
-    partymemberRouter.route('/partymember/bygroupid/:groupID')
+    partymemberRouter.route('/bygroupid/:groupID')
         .get((req, res) => {
 
             const query = { GroupID: req.params.groupID };
