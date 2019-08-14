@@ -1,41 +1,82 @@
 const express = require('express');
+/* esling-disable = no-param-reassign */
+const groupController = require('../controllers/groupController');
 
 function routes(Group) {
     const groupRouter = express.Router();
-    //Get a list of Roman Numerals
+    const controller = groupController(Group);
+    //Use group Controller
     groupRouter.route('/group')
-        .post((req, res) => {
-            const group = new group(req.body);
+        .post(controller.post)
+        .get(controller.get);
 
-            Group.save();
-            return res.status(201).json(Group);
-        })
-        .get((req, res) => {
+    // Middleware - call the Controller for Get by ID
+    groupRouter.use('/group/:groupID', (req, res, next) => {
 
-            const query = {};
+        Group.findById(req.params.groupID, (err, group) => {
 
-            //if (req.query.group) {
-            //    query.group = req.query.group;
-            //}
-            Group.find(query, (err, groups) => {
-                if (err) {
-                    return res.send(err);
-                }
+            if (err) {
+                return res.send(err);
+            }
 
-                return res.json(groups);
-            });
+            if (group) {
+                req.group = group;
+                return next();
+            }
 
+            return res.sendStatus(404);
         });
+
+    });
 
     //Take a group by its ID String
     groupRouter.route('/group/:groupID')
         .get((req, res) => {
+            res.json(req.group);
+        })
+        .put((req, res) => {
 
-            Group.findById(req.params.groupID, (err, group) => {
+            const { group } = req;
+
+            group.GroupName = req.body.GroupName;
+
+            group.save((err) => {
                 if (err) {
                     return res.send(err);
                 }
                 return res.json(group);
+            });
+
+
+        })
+        .patch((req, res) => {
+            const { group } = req;
+
+            //if the _id gets accidently passed delet it bofor proceding
+            if (req.body._id) {
+                delete req.body._id;
+            }
+
+            Object.entries(req.body).forEach((Item) => {
+                const key = item[0];
+                const value = item[1];
+                group[key] = value;
+            });
+
+            group.save((err) => {
+                if (err) {
+                    return res.send(err);
+                }
+                return res.json(group);
+            });
+        })
+        .delete((req, res) => {
+            req.group.remove((err) => {
+                if (err) {
+                    return res.send(err);
+                }
+
+                return res.sendStatus(204);
             });
         });
 

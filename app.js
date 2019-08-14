@@ -2,18 +2,18 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
+
 //get datamodels from models folder
 const Character = require('./models/characterModel');
 const Group = require('./models/groupModel');
-//const GroupCharacterAssoc = require('./models/groupCharacterAssocModel');
 const Partymember = require('./models/partymembersModel');
 
 //add the Router and pass models back to the router
 const characterRouter = require('./routes/characterRouter')(Character);
 const groupRouter = require('./routes/groupRouter')(Group);
-//const groupCharacterAssocRouter = require('./routes/groupCharacterAssocRouter')(GroupCharacterAssoc);
 const partymemberRouter = require('./routes/partymemberRouter')(Partymember);
-//const groupCharacterAssocRouter = require('./routes/groupCharacterAssocRouter')(Group);
+
+//Other dependancies
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
@@ -37,6 +37,7 @@ const db = mongoose.connect('mongodb+srv://InTrackerUser:InTrackerPassword@intra
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
 //at this time cors is wide open.
 app.use(cors());
 
